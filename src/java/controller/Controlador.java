@@ -8,11 +8,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import modeloDTO.*;
 import modeloDAO.*;
 
 public class Controlador extends HttpServlet {
-    
+
     Empleado em = new Empleado();
     EmpleadoDAO edao = new EmpleadoDAO();
     Cliente c = new Cliente();
@@ -22,7 +23,7 @@ public class Controlador extends HttpServlet {
     int ide;
     int idc;
     int idp;
-    
+
     Venta v = new Venta();
     List<Venta> lista = new ArrayList<>();
     int item;
@@ -32,15 +33,17 @@ public class Controlador extends HttpServlet {
     int cant;
     double subtotal;
     double totalPagar;
-    
-    String numeroserie="";
+
+    String numeroserie = "";
     VentaDAO vdao = new VentaDAO();
-    
-   
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
+        HttpSession session = request.getSession();
+        Empleado usuario = (Empleado) session.getAttribute("usuario");
+
         if (menu.equals("Principal")) {
             request.getRequestDispatcher("Principal.jsp").forward(request, response);
         }
@@ -93,7 +96,7 @@ public class Controlador extends HttpServlet {
                 default:
                     throw new AssertionError();
             }
-            
+
             request.getRequestDispatcher("Empleado.jsp").forward(request, response);
         }
         if (menu.equals("Cliente")) {
@@ -185,13 +188,13 @@ public class Controlador extends HttpServlet {
                     pdao.delete(idp);
                     request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
                     break;
-                default:                    
+                default:
                     throw new AssertionError();
             }
-            
+
             request.getRequestDispatcher("Producto.jsp").forward(request, response);
         }
-        if (menu.equals("NuevaVenta")) {           
+        if (menu.equals("NuevaVenta")) {
             switch (accion) {
                 case "BuscarCliente":
                     String dni = request.getParameter("codigocliente");
@@ -199,15 +202,19 @@ public class Controlador extends HttpServlet {
                     c = cdao.buscar(dni);
                     request.setAttribute("c", c);
                     request.setAttribute("nserie", numeroserie);
+                    session.setAttribute("usuario", usuario);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
                     break;
                 case "BuscarProducto":
                     int id = Integer.parseInt(request.getParameter("codigoproducto"));
-                    p = pdao.listarId(id);                    
+                    p = pdao.listarId(id);
                     request.setAttribute("c", c);
-                    request.setAttribute("producto", p);                    
-                    request.setAttribute("lista", lista);                    
+                    request.setAttribute("producto", p);
+                    request.setAttribute("lista", lista);
                     request.setAttribute("totalpagar", totalPagar);
                     request.setAttribute("nserie", numeroserie);
+                    session.setAttribute("usuario", usuario);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
                     break;
                 case "Agregar":
                     request.setAttribute("nserie", numeroserie);
@@ -231,17 +238,19 @@ public class Controlador extends HttpServlet {
                         totalPagar = totalPagar + lista.get(i).getSubtotal();
                     }
                     request.setAttribute("totalpagar", totalPagar);
-                    request.setAttribute("lista", lista);                    
+                    request.setAttribute("lista", lista);
+                    session.setAttribute("usuario", usuario);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
                     break;
                 case "GenerarVenta":
                     //Actualizacion del Stock
                     for (int i = 0; i < lista.size(); i++) {
-                        Producto pr=new Producto();
-                        int cantidad=lista.get(i).getCantidad();
-                        int idproducto=lista.get(i).getIdproducto();
-                        ProductoDAO aO=new ProductoDAO();
-                        pr=aO.buscar(idproducto);
-                        int sac=pr.getStock()-cantidad;
+                        Producto pr = new Producto();
+                        int cantidad = lista.get(i).getCantidad();
+                        int idproducto = lista.get(i).getIdproducto();
+                        ProductoDAO aO = new ProductoDAO();
+                        pr = aO.buscar(idproducto);
+                        int sac = pr.getStock() - cantidad;
                         aO.actualizarstock(idproducto, sac);
                     }
                     //Guardar Venta
@@ -251,28 +260,29 @@ public class Controlador extends HttpServlet {
                     v.setFecha("2019-06-14");
                     v.setMonto(totalPagar);
                     v.setEstado("1");
-                    int r=vdao.guardarVenta(v);
+                    int r = vdao.guardarVenta(v);
                     //Guardar Detalle ventas
-                    int idv=Integer.parseInt(vdao.IdVentas());
+                    int idv = Integer.parseInt(vdao.IdVentas());
                     for (int i = 0; i < lista.size(); i++) {
-                        v=new Venta();
+                        v = new Venta();
                         v.setId(idv);
                         v.setIdproducto(lista.get(i).getIdproducto());
                         v.setCantidad(lista.get(i).getCantidad());
                         v.setPrecio(lista.get(i).getPrecio());
-                        r=vdao.guardarDetalleventas(v);
+                        r = vdao.guardarDetalleventas(v);
                     }
-                    lista=new ArrayList<>();
-                    System.out.println("Venta Realizada con Éxito..!!!:"+r);
+                    lista = new ArrayList<>();
+                    request.getRequestDispatcher("Controlador?menu=NuevaVenta&accion=ventanueva").forward(request, response);
+                    System.out.println("Venta Realizada con Éxito..!!!:" + r);
                     break;
-                default:                    
+                default:
                     v = new Venta();
                     lista = new ArrayList<>();
                     item = 0;
-                    totalPagar = 0.0;                    
+                    totalPagar = 0.0;
                     numeroserie = vdao.GenerarSerie();
                     if (numeroserie == null) {
-                        numeroserie = "000000001";                        
+                        numeroserie = "000000001";
                         request.setAttribute("nserie", numeroserie);
                     } else {
                         int incrementar = Integer.parseInt(numeroserie);
@@ -280,30 +290,36 @@ public class Controlador extends HttpServlet {
                         numeroserie = gs.NumeroSerie(incrementar);
                         request.setAttribute("nserie", numeroserie);
                     }
+                    session.setAttribute("usuario", usuario);
                     request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
             }
-            //request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
         }
-        
+        if(menu.equals("EnviarCorreo")){
+            switch(accion){
+                case "New":
+                    request.getRequestDispatcher("EnviarCorreo.jsp").forward(request, response);
+                    break;
+            }
+            
+        }
+
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-       @Override
+    @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    
 
 }

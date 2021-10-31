@@ -1,5 +1,5 @@
 <div class="footer">
-   <a href="http://www.google.com">sistema@ventas.com.pe</a>
+    <a href="http://www.google.com">sistema@ventas.com.pe</a>
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -15,38 +15,43 @@
     $(".alert").alert();
     window.setTimeout(function () {
         $(".alert").alert('close');
-    }, 3000);
-</script>
+    }, 3000);</script>
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
             dom: 'Bfrtip',
+            scrollX: true,
             buttons: [
                 {
                     extend: 'pdf',
                     exportOptions: {
-                        columns: [1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4]
                     },
-                    title: 'Reporte de Ventas'
+                    title: 'Reporte',
+                    customize: function (doc) {
+                        doc.styles.tableHeader.alignment = 'left'; //giustifica a sinistra titoli colonne
+                        doc.content[1].table.widths = [10, 150, 90, 60, 60];
+                        doc.content[1].margin = [ 50, 0, 100, 0 ]
+                    }
                 },
                 {
                     extend: 'excel',
                     exportOptions: {
-                        columns: [1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4]
                     },
-                    title: 'Reporte de Ventas'
+                    title: 'Reporte'
                 },
                 {
                     extend: 'print',
                     exportOptions: {
-                        columns: [1, 2, 3, 4, 5]
+                        columns: [0, 1, 2, 3, 4]
                     },
-                    title: 'Reporte de Ventas'
+                    title: 'Reporte'
                 }
                 //'excel', 'pdf', 'print'
             ],
             "ordering": false,
-            "iDisplayLength": 7,
+            "iDisplayLength": 5,
             "scrollCollapse": true,
             "language": {
                 "sProcessing": "Procesando...",

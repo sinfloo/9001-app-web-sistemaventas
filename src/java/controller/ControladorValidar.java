@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class ControladorValidar extends HttpServlet {
 
@@ -16,17 +17,21 @@ public class ControladorValidar extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
+        HttpSession session=request.getSession();
+        
         if (accion.equalsIgnoreCase("Ingresar")) {
             String user = request.getParameter("txtuser");
             String pass = request.getParameter("txtpass");
             em = edao.validar(user, pass);
             if (em.getUser() != null) {
-                request.setAttribute("usuario", em);
+                session.setAttribute("usuario", em);
                 request.getRequestDispatcher("Controlador?menu=Principal").forward(request, response);
             } else {
+                session.invalidate();
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
         } else {
+            session.invalidate();
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
 
