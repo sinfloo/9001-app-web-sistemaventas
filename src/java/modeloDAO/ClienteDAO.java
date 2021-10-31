@@ -1,5 +1,5 @@
 
-package modeloDTO;
+package modeloDAO;
 
 import config.Conexion;
 import java.sql.Connection;
@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import modeloDTO.Cliente;
 
 public class ClienteDAO {
     Conexion cn = new Conexion();

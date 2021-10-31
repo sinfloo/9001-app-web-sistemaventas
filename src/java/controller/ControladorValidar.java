@@ -1,7 +1,7 @@
 package controller;
 
 import modeloDTO.Empleado;
-import modeloDTO.EmpleadoDAO;
+import modeloDAO.EmpleadoDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

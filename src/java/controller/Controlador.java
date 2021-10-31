@@ -1,13 +1,5 @@
 package controller;
 
-import modeloDTO.Cliente;
-import modeloDTO.ClienteDAO;
-import modeloDTO.Empleado;
-import modeloDTO.EmpleadoDAO;
-import modeloDTO.Producto;
-import modeloDTO.ProductoDAO;
-import modeloDTO.Venta;
-import modeloDTO.VentaDAO;
 import config.GenerarSerie;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modeloDTO.*;
+import modeloDAO.*;
 
 public class Controlador extends HttpServlet {
     

@@ -1,4 +1,4 @@
-package modeloDTO;
+package modeloDAO;
 
 import config.Conexion;
 import java.sql.Connection;
@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import modeloDTO.Empleado;
 
 public class EmpleadoDAO {
 
