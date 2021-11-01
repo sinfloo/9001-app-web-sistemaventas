@@ -155,8 +155,9 @@ public class Controlador extends HttpServlet {
         if (menu.equals("Producto")) {
             switch (accion) {
                 case "Listar":
-                    List lista = pdao.listar();
-                    request.setAttribute("productos", lista);
+                    List productos = pdao.listar();
+                    request.setAttribute("productos", productos);
+                    request.getRequestDispatcher("Producto.jsp").forward(request, response);
                     break;
                 case "Agregar":
                     String dni = request.getParameter("txtDni");
@@ -198,7 +199,7 @@ public class Controlador extends HttpServlet {
                     throw new AssertionError();
             }
 
-            request.getRequestDispatcher("Producto.jsp").forward(request, response);
+            
         }
         if (menu.equals("NuevaVenta")) {
             switch (accion) {
