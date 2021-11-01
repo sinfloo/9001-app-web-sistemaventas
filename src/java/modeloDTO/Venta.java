@@ -115,6 +115,7 @@ public class Venta {
     }
 
     public Double getSubtotal() {
+        subtotal=precio*cantidad;
         return subtotal;
     }
 

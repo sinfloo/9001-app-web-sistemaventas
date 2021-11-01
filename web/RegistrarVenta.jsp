@@ -81,10 +81,14 @@
                                     <td>${list.getIdproducto()}</td>
                                     <td>${list.getDescripcionP()}</td>
                                     <td>${list.getPrecio()}</td>
-                                    <td>${list.getCantidad()}</td>
+                                    <td>         
+                                        <input type="hidden" id="item1" value="${list.getIdproducto()}">
+                                        <input type="number" min="1" max="10" id="Cant" class=" form-control text-center" value="${list.getCantidad()}">
+                                    </td>
                                     <td>${list.getSubtotal()}</td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></a>
+                                        <input type="hidden" id="item2" value="${list.getIdproducto()}">
+                                        <a id="deleteItem" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></a>                                        
                                     </td>
                                 </tr>
                             </c:forEach>
