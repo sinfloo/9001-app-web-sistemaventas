@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import modeloDTO.*;
 import modeloDAO.*;
+import sendemail.SendEmailUsingGMailSMTP;
 
 public class Controlador extends HttpServlet {
 
@@ -102,7 +103,7 @@ public class Controlador extends HttpServlet {
         if (menu.equals("Cliente")) {
             switch (accion) {
                 case "Listar":
-                    List lista = cdao.listar();
+                    List<Cliente> lista = cdao.listar();
                     request.setAttribute("clientes", lista);
                     break;
                 case "Agregar":
@@ -297,7 +298,31 @@ public class Controlador extends HttpServlet {
         if(menu.equals("EnviarCorreo")){
             switch(accion){
                 case "New":
+                    List<Cliente> clientes = cdao.listar();
+                    request.setAttribute("clientes", clientes);
+                    session.setAttribute("clientesSeleted", new ArrayList<Cliente>());
                     request.getRequestDispatcher("EnviarCorreo.jsp").forward(request, response);
+                    break;
+                case "add":
+                    List<Cliente> getClientes = cdao.listar();
+                    request.setAttribute("clientes", getClientes);
+                    List<Cliente> selected=new ArrayList<>();
+                    for (Cliente c : getClientes) {
+                        String var=request.getParameter("txtSend"+c.getId());
+                        if(var!=null&&var.equals("on")){
+                            selected.add(c);
+                        }
+                    }
+                    session.setAttribute("clientesSeleted", selected);
+                    request.setAttribute("clientes", getClientes);
+                    request.getRequestDispatcher("EnviarCorreo.jsp").forward(request, response);
+                    break;
+                case "enviar":
+                    List<Cliente> selectedToSend=(List<Cliente>)session.getAttribute("clientesSeleted");
+                    String asunto=request.getParameter("txtAsunto");
+                    String mensaje=request.getParameter("txtMensaje");
+                    SendEmailUsingGMailSMTP.sendEmail(asunto, mensaje, selectedToSend);
+                    request.getRequestDispatcher("Controlador?menu=EnviarCorreo&accion=New").forward(request, response);
                     break;
             }
             

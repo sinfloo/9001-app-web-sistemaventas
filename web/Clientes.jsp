@@ -16,8 +16,8 @@
                             <input type="text" value="${cliente.getNom()}" name="txtNombres" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Direccion</label>
-                            <input type="text" value="${cliente.getDir()}" name="txtTel" class="form-control">
+                            <label>Email</label>
+                            <input type="email" value="${cliente.getDir()}" name="txtTel" class="form-control" required="">
                         </div>
                         <div class="form-group">
                             <label>Estado</label>
@@ -40,7 +40,7 @@
                             <tr class="text-center">
                                 <th>#</th>                                
                                 <th>NOMBRES</th>
-                                <th>DIRECCION</th>
+                                <th>EMAIL</th>
                                 <th>DNI</th>
                                 <th>ESTADO</th>                                   
                                 <th>ACCION</th>
@@ -65,7 +65,6 @@
                                     </td>
                                 </tr>
                             </c:forEach>
-
                         </tbody>
                     </table>
                 </div>
