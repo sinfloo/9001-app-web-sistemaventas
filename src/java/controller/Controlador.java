@@ -1,9 +1,14 @@
 package controller;
 
 import config.GenerarSerie;
+import config.Imprimir;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -330,6 +335,13 @@ public class Controlador extends HttpServlet {
                         v.setCantidad(lista.get(i).getCantidad());
                         v.setPrecio(lista.get(i).getPrecio());
                         r = vdao.guardarDetalleventas(v);
+                    }
+
+                    Imprimir.imprimirDocumento(lista,numeroserie,c,em);
+                    try {
+                        Desktop.getDesktop().open(new File(numeroserie + ".txt"));                        
+                    } catch (IOException ex) {
+                        Logger.getLogger(Imprimir.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     lista = new ArrayList<>();
                     request.getRequestDispatcher("Controlador?menu=NuevaVenta&accion=ventanueva").forward(request, response);
