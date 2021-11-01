@@ -99,7 +99,7 @@ INSERT INTO `producto` (`IdProducto`, `Nombres`, `Precio`, `Stock`, `Estado`) VA
 (7, 'Producto Nuevo w', 22, 35, '1');
 
 INSERT INTO `cliente` (`IdCliente`, `Dni`, `Nombres`, `Direccion`, `Estado`) VALUES
-(17, '123', 'Juan Guerrero Solis', 'joelpc3506@outlook.com', '1'),
-(18, '321', 'Maria Rosas Villanueva', 'joelpc@upeu.edu.pe', '1'),
-(19, '432', 'Andres de Santa Cruz', 'joelpc@upeu.edu.pe', '1'),
-(20, '234', 'Andres Mendoza', 'joelpc@upeu.edu.pe', '1');
+(17, '123', 'Juan Guerrero Solis', 'example@outlook.com', '1'),
+(18, '321', 'Maria Rosas Villanueva', 'example@peru.edu.pe', '1'),
+(19, '432', 'Andres de Santa Cruz', 'example@nasa.edu.pe', '1'),
+(20, '234', 'Andres Mendoza', 'example@google.edu.pe', '1');
