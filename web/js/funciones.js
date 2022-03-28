@@ -8,7 +8,7 @@ $("tr #Cant").click(function (e) {
         url: url,
         data: "id=" + idp + "&cantidad=" + cantidad,
         success: function (data, textStatus, jqXHR) {
-            parent.location.href = "Controlador?menu=NuevaVenta&accion=updateCant";
+            location.href = "Controlador?menu=NuevaVenta&accion=updateCant";
         }
     });
 });
@@ -30,7 +30,7 @@ $("tr #deleteItem").click(function (e) {
                 icon: "success",
             }).then((willDelete) => {
                 if (willDelete) {
-                    parent.location.href = "Controlador?menu=NuevaVenta&accion=updateCant";
+                    location.href = "Controlador?menu=NuevaVenta&accion=updateCant";
                 }
             });
         }
